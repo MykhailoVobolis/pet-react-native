@@ -1,5 +1,16 @@
-import {Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import {useState} from 'react';
+import {HidePassIcon, ViewPassIcon} from '../../../assets/icons';
+
 import styles from './styles';
 
 interface IInputValue {
@@ -10,7 +21,8 @@ interface IInputValue {
 }
 
 export default function LoginPage() {
-  const [inputValue, setInputValue] = useState<IInputValue>({
+  const [isPassHidden, setIsPassHidden] = useState(true);
+  const [inputValues, setInputValue] = useState<IInputValue>({
     email: '',
     password: '',
     errorEmail: null,
@@ -29,7 +41,7 @@ export default function LoginPage() {
       '^([a-zA-Z0-9._%-]+@[a-z0-9.-]+.[a-z]{2,6})*$',
     );
 
-    if (!emailValidation.test(inputValue.email)) {
+    if (!emailValidation.test(inputValues.email)) {
       handleChangeInput('errorEmail', 'Not valide email');
     } else {
       handleChangeInput('errorEmail', null);
@@ -47,55 +59,93 @@ export default function LoginPage() {
     }
   };
 
+  const isDisabledLoginBtn = Boolean(
+    inputValues.errorEmail ||
+      inputValues.errorPassword ||
+      !inputValues.email ||
+      !inputValues.password,
+  );
+
   return (
-    <View style={styles.mainWrapper}>
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>Раді тебе вітати!</Text>
-        <Text style={styles.welcomeText}>
-          Кожен пухнастик заслуговує на дбайливих господарів. Ми допоможемо тобі
-          знайти друга.
-        </Text>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={styles.mainWrapper}>
+        <KeyboardAvoidingView
+          keyboardVerticalOffset={Platform.select({android: 20, ios: 90})}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>Раді тебе вітати!</Text>
+            <Text style={styles.welcomeText}>
+              Кожен пухнастик заслуговує на дбайливих господарів. Ми допоможемо
+              тобі знайти друга.
+            </Text>
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.loginBtn}>
+              <Text style={styles.authText}>Вхід</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.registrationBtn}>
+              <Text style={styles.authText}>Реєстрація</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.formContainer}>
+            <View style={styles.inputContainer}>
+              <TextInput
+                placeholder={'Email'}
+                style={styles.input}
+                placeholderTextColor={'#838383'}
+                onBlur={() => {
+                  checkEmail();
+                }}
+                value={inputValues.email}
+                onChangeText={text => handleChangeInput('email', text)}
+              />
+            </View>
+            {inputValues.errorEmail && <Text>{inputValues.errorEmail}</Text>}
+            <View style={styles.inputContainer}>
+              <TextInput
+                placeholder={'Password'}
+                style={styles.input}
+                placeholderTextColor={'#838383'}
+                value={inputValues.password}
+                onChangeText={text => {
+                  handleChangeInput('password', text);
+                  checkPassword(text);
+                }}
+                secureTextEntry={isPassHidden}
+              />
+              <TouchableOpacity
+                onPress={() => {
+                  setIsPassHidden(!isPassHidden);
+                }}
+                hitSlop={{top: 15, bottom: 15, right: 15, left: 15}}
+
+                // style={
+                //   isPassHidden
+                //     ? styles.disablePasswordBtn
+                //     : styles.activePasswordBtn
+                // }
+              >
+                {isPassHidden ? (
+                  <HidePassIcon fill={'#A36161'} />
+                ) : (
+                  <ViewPassIcon fill={'#000000'} />
+                )}
+              </TouchableOpacity>
+            </View>
+            {inputValues.errorPassword && (
+              <Text>{inputValues.errorPassword}</Text>
+            )}
+          </View>
+          <TouchableOpacity
+            style={[
+              styles.loginBtnContainer,
+              isDisabledLoginBtn && {opacity: 0.5},
+            ]}
+            disabled={isDisabledLoginBtn}>
+            <Text style={styles.loginText}>Увійти</Text>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
       </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.loginBtn}>
-          <Text style={styles.authText}>Вхід</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.registrationBtn}>
-          <Text style={styles.authText}>Реєстрація</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.formContainer}>
-        <View style={styles.inputContainer}>
-          <TextInput
-            placeholder={'Email'}
-            style={styles.input}
-            placeholderTextColor={'#838383'}
-            onBlur={() => {
-              checkEmail();
-            }}
-            value={inputValue.email}
-            onChangeText={text => handleChangeInput('email', text)}
-          />
-        </View>
-        {inputValue.errorEmail && <Text>{inputValue.errorEmail}</Text>}
-        <View style={styles.inputContainer}>
-          <TextInput
-            placeholder={'Password'}
-            style={styles.input}
-            placeholderTextColor={'#838383'}
-            value={inputValue.password}
-            onChangeText={text => {
-              handleChangeInput('password', text);
-              checkPassword(text);
-            }}
-            secureTextEntry={true}
-          />
-        </View>
-        {inputValue.errorPassword && <Text>{inputValue.errorPassword}</Text>}
-      </View>
-      <TouchableOpacity style={styles.loginBtnContainer}>
-        <Text style={styles.loginText}>Увійти</Text>
-      </TouchableOpacity>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
