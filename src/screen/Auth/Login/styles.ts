@@ -1,18 +1,18 @@
 import {Platform, StyleSheet} from 'react-native';
+import {fonts} from '../../../constants/fonts';
 
 export default StyleSheet.create({
   mainWrapper: {
     margin: 20,
-    // marginTop: Platform.select({
-    //   ios: 70,
-    //   android: 90,
-    //   default: 70,
-    // }),
     flex: 1,
     justifyContent: 'center',
   },
-  title: {fontSize: 24, color: 'black'},
-  welcomeText: {fontSize: 14, color: 'black'},
+  title: {fontSize: 24, color: 'black', fontFamily: fonts.ComfortaaRegular},
+  welcomeText: {
+    fontSize: 17,
+    color: 'black',
+    fontFamily: fonts.MontserratRegular,
+  },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -52,16 +52,6 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  // activePasswordBtn: {
-  //   height: 20,
-  //   width: 20,
-  //   backgroundColor: '#6A932D',
-  // },
-  // disablePasswordBtn: {
-  //   height: 20,
-  //   width: 20,
-  //   backgroundColor: '#7A5143',
-  // },
   formContainer: {marginTop: 28, marginBottom: 68},
   input: {
     padding: 0,

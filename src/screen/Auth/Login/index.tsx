@@ -117,14 +117,7 @@ export default function LoginPage() {
                 onPress={() => {
                   setIsPassHidden(!isPassHidden);
                 }}
-                hitSlop={{top: 15, bottom: 15, right: 15, left: 15}}
-
-                // style={
-                //   isPassHidden
-                //     ? styles.disablePasswordBtn
-                //     : styles.activePasswordBtn
-                // }
-              >
+                hitSlop={{top: 15, bottom: 15, right: 15, left: 15}}>
                 {isPassHidden ? (
                   <HidePassIcon fill={'#A36161'} />
                 ) : (
