@@ -1,17 +1,11 @@
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import {View} from 'react-native';
 import {useState} from 'react';
-import {HidePassIcon, ViewPassIcon} from '../../../assets/icons';
+import AuthHeader from '../components/AuthHeader';
+import AuthLayout from '../components/AuthLayout';
+import Input from '../../../common/components/Input';
+import DefaultButton from '../../../common/components/DefaultButton';
 
-import styles from './styles';
+import styles from '../styles';
 
 interface IInputValue {
   email: string;
@@ -21,7 +15,6 @@ interface IInputValue {
 }
 
 export default function LoginPage() {
-  const [isPassHidden, setIsPassHidden] = useState(true);
   const [inputValues, setInputValue] = useState<IInputValue>({
     email: '',
     password: '',
@@ -67,78 +60,38 @@ export default function LoginPage() {
   );
 
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={styles.mainWrapper}>
-        <KeyboardAvoidingView
-          keyboardVerticalOffset={Platform.select({android: 20, ios: 90})}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.title}>Раді тебе вітати!</Text>
-            <Text style={styles.welcomeText}>
-              Кожен пухнастик заслуговує на дбайливих господарів. Ми допоможемо
-              тобі знайти друга.
-            </Text>
-          </View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.loginBtn}>
-              <Text style={styles.authText}>Вхід</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.registrationBtn}>
-              <Text style={styles.authText}>Реєстрація</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.formContainer}>
-            <View style={styles.inputContainer}>
-              <TextInput
-                placeholder={'Email'}
-                style={styles.input}
-                placeholderTextColor={'#838383'}
-                onBlur={() => {
-                  checkEmail();
-                }}
-                value={inputValues.email}
-                onChangeText={text => handleChangeInput('email', text)}
-              />
-            </View>
-            {inputValues.errorEmail && <Text>{inputValues.errorEmail}</Text>}
-            <View style={styles.inputContainer}>
-              <TextInput
-                placeholder={'Password'}
-                style={styles.input}
-                placeholderTextColor={'#838383'}
-                value={inputValues.password}
-                onChangeText={text => {
-                  handleChangeInput('password', text);
-                  checkPassword(text);
-                }}
-                secureTextEntry={isPassHidden}
-              />
-              <TouchableOpacity
-                onPress={() => {
-                  setIsPassHidden(!isPassHidden);
-                }}
-                hitSlop={{top: 15, bottom: 15, right: 15, left: 15}}>
-                {isPassHidden ? (
-                  <HidePassIcon fill={'#A36161'} />
-                ) : (
-                  <ViewPassIcon fill={'#000000'} />
-                )}
-              </TouchableOpacity>
-            </View>
-            {inputValues.errorPassword && (
-              <Text>{inputValues.errorPassword}</Text>
-            )}
-          </View>
-          <TouchableOpacity
-            style={[
-              styles.loginBtnContainer,
-              isDisabledLoginBtn && {opacity: 0.5},
-            ]}
-            disabled={isDisabledLoginBtn}>
-            <Text style={styles.loginText}>Увійти</Text>
-          </TouchableOpacity>
-        </KeyboardAvoidingView>
+    <AuthLayout>
+      <AuthHeader activeTab={'login'} />
+      <View style={styles.formContainer}>
+        <Input
+          onBlur={checkEmail}
+          value={inputValues.email}
+          onChangeText={text => handleChangeInput('email', text)}
+          error={
+            inputValues.errorEmail !== null ? inputValues.errorEmail : undefined
+          }
+          placeholder={'Email'}
+        />
+        <Input
+          placeholder={'Password'}
+          value={inputValues.password}
+          onChangeText={text => {
+            handleChangeInput('password', text);
+            checkPassword(text);
+          }}
+          error={
+            inputValues.errorPassword !== null
+              ? inputValues.errorPassword
+              : undefined
+          }
+          secureTextEntry={true}
+        />
       </View>
-    </TouchableWithoutFeedback>
+      <DefaultButton
+        onPress={() => {}}
+        disabled={isDisabledLoginBtn}
+        text={'Увійти'}
+      />
+    </AuthLayout>
   );
 }

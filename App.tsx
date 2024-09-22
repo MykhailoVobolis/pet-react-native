@@ -15,8 +15,6 @@ function App(): React.JSX.Element {
         NativeModules.DevSettings.setIsDebuggingRemotely(false);
       });
     }
-    console.log('Info', {age: 25, array: [1, 2, 3, 5, {name: 'Mykhailo'}]});
-    fetch('https://google.com');
   }, []);
 
   return (
