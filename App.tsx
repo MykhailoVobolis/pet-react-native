@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {DevSettings, NativeModules, SafeAreaView} from 'react-native';
 import LoginPage from './src/screen/Auth/Login';
+import RootNavigation from './src/navigation';
 
 function App(): React.JSX.Element {
   // Налаштування дебвг меню у react-native-debugger
@@ -19,7 +20,7 @@ function App(): React.JSX.Element {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <LoginPage />
+      <RootNavigation />
     </SafeAreaView>
   );
 }

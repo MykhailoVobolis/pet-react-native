@@ -1,12 +1,27 @@
 import {Text, TouchableOpacity, View} from 'react-native';
-import styles from '../../styles';
 import React from 'react';
+import {useNavigation} from '@react-navigation/native';
+
+import styles from '../../styles';
+import {ScreenNames} from '../../../../constants/screenNames';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackNavigation} from '../../../../navigation/types';
 
 interface IAuthHeader {
   activeTab: 'login' | 'registration';
 }
 
 export default function AuthHeader({activeTab}: IAuthHeader) {
+  const navigation = useNavigation<StackNavigationProp<RootStackNavigation>>();
+
+  const navigateToLogin = () => {
+    navigation.navigate(ScreenNames.LOGIN_PAGE);
+  };
+
+  const navigateRegistration = () => {
+    navigation.navigate(ScreenNames.REGISTRATION_PAGE);
+  };
+
   return (
     <>
       <View style={[styles.titleContainer]}>
@@ -18,10 +33,12 @@ export default function AuthHeader({activeTab}: IAuthHeader) {
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
+          onPress={navigateToLogin}
           style={activeTab === 'login' ? styles.activeTab : styles.disabledTab}>
           <Text style={styles.authText}>Вхід</Text>
         </TouchableOpacity>
         <TouchableOpacity
+          onPress={navigateRegistration}
           style={
             activeTab === 'registration' ? styles.activeTab : styles.disabledTab
           }>
