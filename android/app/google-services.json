@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "18498698810",
+    "project_id": "pet-project-81a86",
+    "storage_bucket": "pet-project-81a86.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:18498698810:android:7945bb94331066ec803f03",
+        "android_client_info": {
+          "package_name": "com.petreactnative"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsg2_0dcIQD0Yu_uV3XNanO_o0oCO7q6o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
