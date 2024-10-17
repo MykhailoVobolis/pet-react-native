@@ -18,7 +18,7 @@ export default function AuthHeader({activeTab}: IAuthHeader) {
     navigation.navigate(ScreenNames.LOGIN_PAGE);
   };
 
-  const navigateRegistration = () => {
+  const navigateToRegistration = () => {
     navigation.navigate(ScreenNames.REGISTRATION_PAGE);
   };
 
@@ -38,7 +38,7 @@ export default function AuthHeader({activeTab}: IAuthHeader) {
           <Text style={styles.authText}>Вхід</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={navigateRegistration}
+          onPress={navigateToRegistration}
           style={
             activeTab === 'registration' ? styles.activeTab : styles.disabledTab
           }>

@@ -1,5 +1,7 @@
 import {View} from 'react-native';
 import {useState} from 'react';
+import auth from '@react-native-firebase/auth';
+
 import AuthHeader from '../components/AuthHeader';
 import AuthLayout from '../components/AuthLayout';
 import Input from '../../../common/components/Input';
@@ -52,6 +54,15 @@ export default function LoginPage() {
     }
   };
 
+  const onLogin = async (email, password) => {
+    try {
+      const result = auth().signInWithEmailAndPassword(email, password);
+      console.log('RESULT', result);
+    } catch (error) {
+      console.log('e', error);
+    }
+  };
+
   const isDisabledLoginBtn = Boolean(
     inputValues.errorEmail ||
       inputValues.errorPassword ||
@@ -88,7 +99,9 @@ export default function LoginPage() {
         />
       </View>
       <DefaultButton
-        onPress={() => {}}
+        onPress={() => {
+          void onLogin(inputValues.email, inputValues.password);
+        }}
         disabled={isDisabledLoginBtn}
         text={'Увійти'}
       />

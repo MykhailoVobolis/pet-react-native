@@ -1,6 +1,7 @@
 import {View} from 'react-native';
-import {useState} from 'react';
-import {Formik, FormikValues} from 'formik';
+import {useEffect, useState} from 'react';
+import {Formik, FormikHelpers, FormikValues} from 'formik';
+import auth from '@react-native-firebase/auth';
 
 import AuthLayout from '../components/AuthLayout/index';
 import AuthHeader from '../components/AuthHeader/index';
@@ -23,6 +24,31 @@ export default function Registration() {
     confirmPassword: false,
   });
 
+  const registrateUser = async (
+    email: string,
+    password: string,
+    formikHelpers: FormikHelpers<FormikValues>,
+  ) => {
+    try {
+      const result = await auth().createUserWithEmailAndPassword(
+        email,
+        password,
+      );
+      console.log('result', result);
+    } catch (error) {
+      if (error.code === 'auth/email-already-in-use') {
+        formikHelpers.setErrors({email: 'email-already-in-use'});
+      }
+    }
+  };
+  //Authentication with Firebase
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(user => {
+      console.log('user', user);
+    });
+    return subscriber; // скасування піддписки при відключенні
+  }, []);
+
   return (
     <AuthLayout>
       <AuthHeader activeTab={'registration'} />
@@ -32,8 +58,8 @@ export default function Registration() {
           password: '',
           confirmPassword: '',
         }}
-        onSubmit={value => {
-          console.log('value', value);
+        onSubmit={(value, formikHelpers) => {
+          void registrateUser(value.email, value.password, formikHelpers);
         }}
         validationSchema={RegistrationSchema()}>
         {({
