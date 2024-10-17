@@ -9,6 +9,11 @@ import Input from '../../../common/components/Input/index';
 import DefaultButton from '../../../common/components/DefaultButton/index';
 
 import {RegistrationSchema} from '../utils/validations';
+import {ScreenNames} from '../../../constants/screenNames';
+
+import {CommonActions, useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackNavigation} from '../../../navigation/types';
 
 import styles from '../styles';
 
@@ -24,6 +29,8 @@ export default function Registration() {
     confirmPassword: false,
   });
 
+  const navigation = useNavigation<StackNavigationProp<RootStackNavigation>>();
+
   const registrateUser = async (
     email: string,
     password: string,
@@ -34,7 +41,14 @@ export default function Registration() {
         email,
         password,
       );
-      console.log('result', result);
+      if (result.user) {
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{name: ScreenNames.LOGGED_IN_STACK}],
+          }),
+        );
+      }
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
         formikHelpers.setErrors({email: 'email-already-in-use'});

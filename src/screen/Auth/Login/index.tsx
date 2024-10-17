@@ -1,11 +1,16 @@
 import {View} from 'react-native';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import auth from '@react-native-firebase/auth';
 
 import AuthHeader from '../components/AuthHeader';
 import AuthLayout from '../components/AuthLayout';
 import Input from '../../../common/components/Input';
 import DefaultButton from '../../../common/components/DefaultButton';
+
+import {CommonActions, useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackNavigation} from '../../../navigation/types';
+import {ScreenNames} from '../../../constants/screenNames';
 
 import styles from '../styles';
 
@@ -23,6 +28,8 @@ export default function LoginPage() {
     errorEmail: null,
     errorPassword: null,
   });
+
+  const navigation = useNavigation<StackNavigationProp<RootStackNavigation>>();
 
   const handleChangeInput = (
     key: 'email' | 'password' | 'errorEmail' | 'errorPassword',
@@ -69,6 +76,21 @@ export default function LoginPage() {
       !inputValues.email ||
       !inputValues.password,
   );
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(user => {
+      if (user) {
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{name: ScreenNames.LOGGED_IN_STACK}],
+          }),
+        );
+      }
+    });
+
+    return subscriber;
+  }, []);
 
   return (
     <AuthLayout>
