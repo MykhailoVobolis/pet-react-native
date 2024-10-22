@@ -4,6 +4,7 @@ import TabBarStack from '../TabBarStack';
 import {DrawerStackType} from '../types';
 import Header from '../../common/components/Header';
 import DrawerContent from '../../common/components/DrawerContent';
+import {Dimensions} from 'react-native';
 
 const Drawer = createDrawerNavigator<DrawerStackType>();
 
@@ -17,7 +18,8 @@ export default function DrawerStack() {
       drawerContent={renderDrawerContent}
       screenOptions={{
         header: renderHeader,
-        drawerStyle: {},
+        drawerPosition: 'right',
+        drawerStyle: {width: Dimensions.get('window').width},
       }}>
       <Drawer.Screen name={ScreenNames.TAB_BAR_STACK} component={TabBarStack} />
     </Drawer.Navigator>
