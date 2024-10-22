@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {DevSettings, NativeModules, SafeAreaView} from 'react-native';
-import LoginPage from './src/screen/Auth/Login';
 import RootNavigation from './src/navigation';
+import 'react-native-gesture-handler';
 
 function App(): React.JSX.Element {
   // Налаштування дебвг меню у react-native-debugger
