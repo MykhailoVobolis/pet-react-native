@@ -9,6 +9,7 @@ export type DrawerStackType = {
 
 export type LoggedInStackType = {
   DRAWER_STACK: undefined;
+  FILTERS_SETTINGS_PAGE: undefined;
 };
 
 export type TabBarStackType = {
